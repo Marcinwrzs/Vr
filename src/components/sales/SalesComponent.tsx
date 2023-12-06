@@ -52,10 +52,10 @@ const SalesComponent: React.FC = () => {
   };
 
   return (
-    <Styled.Wrapper>
+    <div>
       <h1>Bar Graph of Sales Data</h1>
       {data && <Bar data={generateChartData()} />}
-    </Styled.Wrapper>
+    </div>
   );
 };
 
