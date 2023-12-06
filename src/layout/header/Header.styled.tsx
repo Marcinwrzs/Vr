@@ -24,6 +24,7 @@ export const Wrapper = styled.div`
 
 export const Link = styled(NavLink)`
   text-decoration: none;
+  color: black;
 
   &:hover {
     color: red;
