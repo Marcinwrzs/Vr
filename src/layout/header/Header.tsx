@@ -18,6 +18,9 @@ const Header: React.FC = () => {
         <li>
           <Styled.Link to={Paths.SalesSummary}>Sales summary</Styled.Link>
         </li>
+        <li>
+          <Styled.Link to={Paths.Registration}>Register</Styled.Link>
+        </li>
       </ul>
     </Styled.Wrapper>
   );

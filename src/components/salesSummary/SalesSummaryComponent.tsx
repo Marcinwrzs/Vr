@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as Styled from "./SalesSummaryComponent.styled";
+import { getSalesData } from "../../api/handlers";
 
 interface SalesData {
   id: number;
@@ -10,21 +11,12 @@ interface SalesData {
 }
 
 const SalesSummaryComponent: React.FC = () => {
-  const [data, setData] = useState<SalesData[] | any>(null);
-  const apiPath = `https://vr-test.vendorobotics.com/api`;
-
-  const fetchSalesData = async () => {
-    const response = await fetch(`${apiPath}/sales-data`);
-    if (!response.ok) {
-      throw new Error(`Network error: ${response.status}`);
-    }
-    return await response.json();
-  };
+  const [data, setData] = useState<SalesData[] | null>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const sales = await fetchSalesData();
+        const sales = await getSalesData();
         setData(sales);
       } catch (error) {
         console.error("Error fetching data from API:", error);

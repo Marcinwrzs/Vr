@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import * as Styled from "./SalesComponent.styled";
 import { Bar } from "react-chartjs-2";
 import { ChartData } from "chart.js";
 import { Chart, registerables } from "chart.js";
