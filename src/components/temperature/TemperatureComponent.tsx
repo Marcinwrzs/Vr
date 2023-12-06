@@ -51,10 +51,10 @@ const TemperatureComponent: React.FC = () => {
   };
 
   return (
-    <Styled.Wrapper>
+    <div>
       <h1>Liniowy wykres temperatury</h1>
       {salesData && <Line data={generateChartData()} />}
-    </Styled.Wrapper>
+    </div>
   );
 };
 
