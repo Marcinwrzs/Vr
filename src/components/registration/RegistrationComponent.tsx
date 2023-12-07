@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 interface InputValue {
   name: string;
@@ -16,6 +17,11 @@ const RegistrationComponent: React.FC = () => {
     setValue,
     formState: { errors },
   } = useForm<InputValue>();
+
+  const [userIdToEdit, setUserIdToEdit] = useState<string>("");
+  const [user_id, setUser_id] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<InputValue> = async (data) => {
     try {
@@ -42,14 +48,21 @@ const RegistrationComponent: React.FC = () => {
       setValue("email", "");
       setValue("phoneNumber", "");
       setValue("dateOfBirth", "");
+      setUser_id(responseBody.user_id);
     } catch (error) {
       console.error("Error registering user:", error);
     }
   };
 
+  const editUser = () => {
+    if (!userIdToEdit) return;
+    navigate(`/editUser/${userIdToEdit}`);
+    setUserIdToEdit("");
+  };
+
   return (
     <div>
-      <h2>Registration</h2>
+      <h2>Formularz rejestracji użytkownika</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>
           Name:
@@ -112,6 +125,20 @@ const RegistrationComponent: React.FC = () => {
         <br />
 
         <button type="submit">Register</button>
+      </form>
+      {user_id && <h4>Twoje id to {user_id}</h4>}
+
+      <h1>Edycja uzytkownika</h1>
+      <form onSubmit={editUser}>
+        <input
+          type="text"
+          placeholder="edit user"
+          value={userIdToEdit}
+          onChange={(e) => setUserIdToEdit(e.target.value)}
+        />
+        <button type="submit" disabled={!userIdToEdit}>
+          edit
+        </button>
       </form>
     </div>
   );
