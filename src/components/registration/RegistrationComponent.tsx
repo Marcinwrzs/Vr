@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface InputValue {
   name: string;
@@ -9,22 +10,14 @@ interface InputValue {
 }
 
 const RegistrationComponent: React.FC = () => {
-  const [formData, setFormData] = useState<InputValue>({
-    name: "",
-    surname: "",
-    email: "",
-    phoneNumber: "",
-    dateOfBirth: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<InputValue>();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit: SubmitHandler<InputValue> = async (data) => {
     try {
       const response = await fetch(
         "https://vr-test.vendorobotics.com/api/users",
@@ -33,21 +26,22 @@ const RegistrationComponent: React.FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(data),
         }
       );
+
       if (!response.ok) {
         throw new Error(`Network error: ${response.status}`);
       }
+
       const responseBody = await response.json();
       console.log(`ID: ${responseBody.user_id}`);
-      setFormData({
-        name: "",
-        surname: "",
-        email: "",
-        phoneNumber: "",
-        dateOfBirth: "",
-      });
+
+      setValue("name", "");
+      setValue("surname", "");
+      setValue("email", "");
+      setValue("phoneNumber", "");
+      setValue("dateOfBirth", "");
     } catch (error) {
       console.error("Error registering user:", error);
     }
@@ -56,16 +50,14 @@ const RegistrationComponent: React.FC = () => {
   return (
     <div>
       <h2>Registration</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <label>
           Name:
           <input
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
+            {...register("name", { required: "Name is required" })}
           />
+          {errors.name && <p>{errors.name.message}</p>}
         </label>
         <br />
 
@@ -73,11 +65,9 @@ const RegistrationComponent: React.FC = () => {
           Surname:
           <input
             type="text"
-            name="surname"
-            value={formData.surname}
-            onChange={handleChange}
-            required
+            {...register("surname", { required: "Surname is required" })}
           />
+          {errors.surname && <p>{errors.surname.message}</p>}
         </label>
         <br />
 
@@ -85,11 +75,15 @@ const RegistrationComponent: React.FC = () => {
           Email:
           <input
             type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                message: "Invalid email address",
+              },
+            })}
           />
+          {errors.email && <p>{errors.email.message}</p>}
         </label>
         <br />
 
@@ -97,11 +91,11 @@ const RegistrationComponent: React.FC = () => {
           Phone Number:
           <input
             type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
+            {...register("phoneNumber", {
+              required: "Phone Number is required",
+            })}
           />
+          {errors.phoneNumber && <p>{errors.phoneNumber.message}</p>}
         </label>
         <br />
 
@@ -109,11 +103,11 @@ const RegistrationComponent: React.FC = () => {
           Date of Birth:
           <input
             type="date"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
-            onChange={handleChange}
-            required
+            {...register("dateOfBirth", {
+              required: "Date of Birth is required",
+            })}
           />
+          {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
         </label>
         <br />
 
