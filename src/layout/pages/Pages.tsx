@@ -5,6 +5,7 @@ import SalesSummaryComponent from "../../components/salesSummary/SalesSummaryCom
 import Home from "../../components/home/Home";
 import * as Styled from "./Pages.styled";
 import RegistrationComponent from "../../components/registration/RegistrationComponent";
+import EditUserComponent from "../../components/editUser/EditUserComponent";
 
 export enum Paths {
   Home = "/",
@@ -12,6 +13,8 @@ export enum Paths {
   Temperature = "/temperature",
   SalesSummary = "/salesSummary",
   Registration = "/registration",
+  /* EditUser = "/editUser", */
+  EditUser = "/editUser",
 }
 
 const Pages: React.FC = () => {
@@ -23,6 +26,10 @@ const Pages: React.FC = () => {
         <Route path={Paths.Temperature} element={<TemperatureComponent />} />
         <Route path={Paths.SalesSummary} element={<SalesSummaryComponent />} />
         <Route path={Paths.Registration} element={<RegistrationComponent />} />
+        <Route
+          path={`${Paths.EditUser}/:userId`}
+          element={<EditUserComponent />}
+        />
       </Routes>
     </Styled.Wrapper>
   );
